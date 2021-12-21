@@ -1,0 +1,51 @@
+<html>
+    <head></head>
+    <body>
+        <h1>Big O (Asymtotic Analysis)</h1>
+        <section>
+            <h2>What is it?</h2>
+            <p>Big O allows us to measure and understand the scalability of our code.
+            It is the language we use for describing how long it takes code to run. 
+                We can describe two different algorithmns using Big O and understand which alogrithmn
+                will scale better as the amount of inputs increase.</p>
+            <p>Computers are not magic. They still ultimately have to perform operations base on the code we write. We can give the computer instructions that are efficient, and scale well. But we can also give the computer instructions
+                sub-optimal instructions that cause the number of operations to increase and causing our overall program runtime to increase.
+            </p>
+            <p>
+                It is important to note, that while runtime obviously makes us think of how long it took us to run a program. Big O concerns itself more with how quickly our number of operations increase in order to perform a function.
+            </p>
+            <p>For Example: </p>
+            <p>In the Node example below you can see a performance comparison on the same function with two different inputs. The function performs a basic loop and prints to the console once we've found the element we're searching for.</p>
+            <p>The first call is made with only a single element, and finishes fairly quickly. The second call is made with over 100000 elements and this naturally, takes longer than the call for the single element. As the number of inputs increase, the number of operations we must perform to achive the same output increase as well leading to the overall time increase.</p>
+            <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@ChrisLayton/BigOExamples-on?embed=true"></iframe>
+        </section>
+        <section>
+            <h2>O(N) - Linear Time</h2>
+            <p>If we look at the code in the repl above we can start to see the relationship between the number of inputs and our runtime.</p>
+            <pre>
+            <code>
+                const arr = ["nemo"];
+                const biggerArr = new Array(10000000).fill("CL");
+                biggerArr.push("nemo");
+
+                let findNemo = (arr) => {
+                    const start = performance.now();
+                    for(let i = 0; i < arr.length; i++){
+                        if(arr[i] == 'nemo') {
+                            console.log("FOUND NEMO");
+                        }
+                    }
+                    const end = performance.now();
+                    console.log(`Finding Nemo with elements: ${arr.length} took ${end - start} milliseconds`);
+                }
+
+                findNemo(arr);
+                findNemo(biggerArr);
+            </code>
+            </pre>
+            <p>The code contains a very simple for loop that, no matter what, always loops through the entirety of the input array. For every element in the array we will have to go through a loop, checking if we've found Nemo.
+                This describes the concept of Linear Time (or O(n)) - as the amount of inputs increase the number of operations increases by the same amount.
+            </p>
+        </section>
+    </body>
+</html>
