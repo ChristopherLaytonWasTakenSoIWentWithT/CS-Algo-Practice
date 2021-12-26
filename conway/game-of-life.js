@@ -3,12 +3,12 @@
  */
 window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     let width, height = 0;
+    let generation = 0;
+    let board = [];
+
     const canvasRef = canvas;
     const canvasCtx = canvas.getContext("2d");
     const probailityOfLiving = probState;
-    let generation = 0;
-
-    let board = [];
     
     let generateRandom = () => {
         return (Math.random() <= probailityOfLiving) ? 1 : 0;
@@ -23,10 +23,12 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
         height = canvasRef.height;
         board = newBoard().map(generateRandom);
         generation = 0;
+        canvasCtx.fillStyle = "black";
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     let logic = (alive, index) => {
-        let [real_x, real_y] = getRealCoords(index, width);
+        let [real_x, real_y] = getRealCoords(index, width / blockSize);
         let livingNeighbors = 0;
         if(real_x - 1 >= 0) {
             //left;
@@ -72,7 +74,11 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     let tick = () => {
         let nB = new Array(Math.floor(width / blockSize) * Math.floor(height / blockSize)).fill(0);
         const newBoard = nB.map((_, index) => {
-            return logic(board[index], index);
+            let alive = logic(board[index], index)
+            if(!(board[index] == alive)) {
+                draw(alive, index);
+            }
+            return alive;
         });
         board = newBoard;
     }
@@ -85,25 +91,18 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
         let real_x = 0;
         let real_y = 0;
         let fakeWidth = Math.floor(width / blockSize);
-        real_y = Math.floor(index / fakeWidth);
-        real_x = index - (real_y * fakeWidth);
+        real_y = Math.floor(index / width);
+        real_x = index - (real_y * width);
         return [real_x, real_y];
     }
 
-    let draw = () => {
-        board.forEach((alive, index) => {
-            let r = 0;
-            let b = 0;
-            let g = 0;
-            if(alive) {
-                r = 255;
-                g = 255;
-                b = 255;
-            }
-            const [real_x, real_y] = getRealCoords(index, width);
-            canvasCtx.fillStyle ="rgba("+r+","+g+","+b+","+(1)+")";
-            canvasCtx.fillRect(real_x + (blockSize - 1),real_y + (blockSize - 1),blockSize,blockSize);
-        });
+    let draw = (alive, index) => {
+        let r = (alive) ? 255 : 0;
+        let [real_x, real_y] = getRealCoords(index, width / blockSize);
+        real_x = (real_x * blockSize);
+        real_y = (real_y * blockSize);
+        canvasCtx.fillStyle ="rgba("+r+","+r+","+r+","+(1)+")";
+        canvasCtx.fillRect(real_x ,real_y ,blockSize,blockSize);
     }
 
     let game = () => {
@@ -115,7 +114,6 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     
     _init();
     game();
-    console.log(board);
 
     return {
         reset : reset
