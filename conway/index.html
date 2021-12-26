@@ -1,0 +1,18 @@
+<html>
+    <head>
+
+    </head>
+    <body>  
+        <canvas id="game-of-life" height="200" width="300"></canvas>
+        <button id="reset" type="button">Reset Game</button>
+        <script src="game-of-life.js"></script>
+        <script>
+            let canvas = document.getElementById('game-of-life');
+            let conway = window.Conway(canvas, .1,1);
+            let reset = document.getElementById('reset');
+            reset.onclick = () => {
+                conway.reset();
+            }
+        </script>
+    </body>
+</html>
