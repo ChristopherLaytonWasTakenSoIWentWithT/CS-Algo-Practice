@@ -1,11 +1,8 @@
-/**
- * Wanna see if I can do it in Linear time using a single-dim array 
- */
 window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     let width, height = 0;
     let generation = 0;
     let board = [];
-
+    //TODO - Need to figure out how to get the blockSize to scale properly for non-1 values
     const canvasRef = canvas;
     const canvasCtx = canvas.getContext("2d");
     const probailityOfLiving = probState;
@@ -15,7 +12,9 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     }
 
     let newBoard = () => {
-        return new Array(Math.floor(width / blockSize) * Math.floor(height / blockSize)).fill(0);
+        //return new Array(Math.floor(width / blockSize) * Math.floor(height / blockSize)).fill(0);
+        
+        return new Array(Math.floor(width) * Math.floor(height)).fill(0);
     }
 
     let _init = () => {
@@ -28,7 +27,7 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     }
 
     let logic = (alive, index) => {
-        let [real_x, real_y] = getRealCoords(index, width / blockSize);
+        let [real_x, real_y] = getRealCoords(index * blockSize, width);
         let livingNeighbors = 0;
         if(real_x - 1 >= 0) {
             //left;
@@ -72,7 +71,8 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     }
 
     let tick = () => {
-        let nB = new Array(Math.floor(width / blockSize) * Math.floor(height / blockSize)).fill(0);
+        //let nB = new Array(Math.floor(width / blockSize) * Math.floor(height / blockSize)).fill(0);
+        let nB = new Array(Math.floor(width) * Math.floor(height)).fill(0);
         const newBoard = nB.map((_, index) => {
             let alive = logic(board[index], index)
             if(!(board[index] == alive)) {
@@ -88,21 +88,16 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     }
 
     let getRealCoords = (index, width) => {
-        let real_x = 0;
-        let real_y = 0;
-        let fakeWidth = Math.floor(width / blockSize);
-        real_y = Math.floor(index / width);
-        real_x = index - (real_y * width);
+        let real_y = Math.floor(index / width);
+        let real_x = index - (real_y * width);
         return [real_x, real_y];
     }
 
     let draw = (alive, index) => {
         let r = (alive) ? 255 : 0;
-        let [real_x, real_y] = getRealCoords(index, width / blockSize);
-        real_x = (real_x * blockSize);
-        real_y = (real_y * blockSize);
+        let [real_x, real_y] = getRealCoords(index , width);
         canvasCtx.fillStyle ="rgba("+r+","+r+","+r+","+(1)+")";
-        canvasCtx.fillRect(real_x ,real_y ,blockSize,blockSize);
+        canvasCtx.fillRect(real_x * blockSize ,real_y * blockSize ,blockSize,blockSize);
     }
 
     let game = () => {
@@ -113,7 +108,7 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
     }
     
     _init();
-    game();
+     game();
 
     return {
         reset : reset

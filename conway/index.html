@@ -3,12 +3,12 @@
 
     </head>
     <body>  
-        <canvas id="game-of-life" height="500" width="500"></canvas>
+        <canvas id="game-of-life" height="600" width="600"></canvas>
         <button id="reset" type="button">Reset Game</button>
         <script src="game-of-life.js"></script>
         <script>
             let canvas = document.getElementById('game-of-life');
-            let conway = window.Conway(canvas, .3,1);
+            let conway = window.Conway(canvas, .1,4);
             let reset = document.getElementById('reset');
             reset.onclick = () => {
                 conway.reset();
