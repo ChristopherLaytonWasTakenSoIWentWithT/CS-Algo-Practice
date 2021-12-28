@@ -104,7 +104,9 @@ window.Conway = (canvas, probState = 0.5, blockSize = 1) => {
         tick();
         draw();
         generation++;
-        requestAnimationFrame(game);
+        setTimeout(() => {
+            requestAnimationFrame(game);
+        }, 1000 / 30);
     }
     
     _init();
